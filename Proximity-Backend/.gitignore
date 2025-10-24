@@ -1,0 +1,34 @@
+# Dependencies
+/node_modules
+
+# Logs
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment Variables
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Operating System files
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+
+# IDE & Editor specific files
+# Visual Studio Code
+.vscode/
+# WebStorm / JetBrains
+.idea/
+
+# Build output (Future ke liye)
+
+/dist
+/build
