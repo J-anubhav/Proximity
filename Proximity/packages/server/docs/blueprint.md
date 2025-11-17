@@ -24,8 +24,35 @@ We are *not* building complex microservices. We are building a **single, powerfu
 | **Video** | **Jitsi Meet** | We will *not* handle WebRTC. We will use Jitsi's public servers (`meet.jit.si`) for free, robust video conferencing. |
 
 ## 3. 📂 Project Structure (`/packages/server`)
-
-/server │ ├── /public/maps │ └── main-office.json <-- Your map exported from Tiled (JSON format) │ ├── /src │ │ │ ├── /api │ │ └── routes.ts <-- Express routes (e.g., GET /api/room-info) │ │ │ ├── /core │ │ ├── stateManager.ts <-- CRITICAL: All Redis logic (get/set player) │ │ └── mapParser.ts <-- CRITICAL: Loads Tiled map and finds Jitsi zones │ │ │ ├── /socket │ │ ├── playerHandler.ts <-- Handles 'join-room', 'player-move' │ │ ├── chatHandler.ts <-- Handles 'send-global-chat' │ │ └── videoHandler.ts <-- CRITICAL: Handles Jitsi room logic │ │ │ ├── /types │ │ └── index.ts <-- Server-specific types │ │ │ ├── mainSocketHandler.ts <-- Main listener, imports other handlers │ └── server.ts <-- Entry point: Starts Express, Socket.io, Redis │ └── package.json
+```
+/packages/server
+├── package.json
+├── server.ts # Entry point: starts Express, HTTP server, Socket.io, and loads map
+├── tsconfig.json
+├── /public
+│ └── /maps
+│ └── main-office.json # Your map exported from Tiled (JSON format)
+├── /src
+│ ├── /api
+│ │ └── routes.ts # Express routes (e.g., GET /api/room-info)
+│ │
+│ ├── /core
+│ │ ├── mapParser.ts # Loads Tiled map and finds Jitsi zones (CRITICAL)
+│ │ └── stateManager.ts # All Redis logic (CRITICAL: add/get/update/remove players)
+│ │
+│ ├── /socket
+│ │ ├── mainSocketHandler.ts # Attaches socket event listeners and imports handlers
+│ │ ├── playerHandler.ts # Handles 'join-room', 'player-move', disconnects
+│ │ ├── chatHandler.ts # Handles 'send-global-chat' / chat broadcasts
+│ │ └── videoHandler.ts # Handles Jitsi zone logic, emits join/leave events (CRITICAL)
+│ │
+│ ├── /types
+│ │ └── index.ts # Shared TypeScript types (Player, Room, etc.)
+│ │
+│ └── /utils
+│ └── logger.ts # Logging (pino/winston wrapper)
+└── /scripts # Optional: dev scripts, migrations, etc.
+```
 
 
 ## 4. 🗄️ Database (Redis) - Detailed Plan
